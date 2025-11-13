@@ -17,7 +17,25 @@ app = Flask(__name__)
 #homepage
 @app.route('/')
 def home():
-    return 'Hello World'
+    return 'This is the home page'
+
+    '''
+	Link - Add new Baking Contest User - (opens the add a New Baking Contest User page)
+	Link - List Baking Contest Users - (opens the List Baking Contest Users page)
+	Link - Baking Contest Results - (opens the list Contest Results page)
+    '''
+
+@app.route('/addNewUser')
+def openAddNewUserPage():
+	return 'This is the add new baking contest user page'
+
+@app.route('/listUsers')
+def listUsersPage():
+	return 'This is the list baking contest users page'
+
+@app.route('/listResults')
+def listResults():
+	return 'This is the list contest results page.'
 
 @app.route('/trial')
 def trial():
