@@ -39,6 +39,10 @@ def listResults():
 	return 'This is the list contest results page.'
 
 
+@app.route('/trial')
+def trial():
+    return 'Trying new page'
+
 if __name__ == '__main__':
     app.run(host='127.0.0.1', port = 50000)
     #visit http://127.0.0.1:50000 to see website
