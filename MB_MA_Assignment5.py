@@ -29,7 +29,6 @@ def home():
 def openAddNewUserPage():
 	return 'This is the add new baking contest user page'
 
-
 @app.route('/listUsers')
 def listUsersPage():
 	return 'This is the list baking contest users page'
@@ -37,11 +36,6 @@ def listUsersPage():
 @app.route('/listResults')
 def listResults():
 	return 'This is the list contest results page.'
-
-
-@app.route('/trial')
-def trial():
-    return 'Trying new page'
 
 if __name__ == '__main__':
     app.run(host='127.0.0.1', port = 50000)
