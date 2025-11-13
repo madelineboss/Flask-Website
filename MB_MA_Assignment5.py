@@ -17,13 +17,12 @@ app = Flask(__name__)
 #homepage
 @app.route('/')
 def home():
-    return 'This is the home page'
-
-    '''
+	return render_template('home.html')
+	'''
 	Link - Add new Baking Contest User - (opens the add a New Baking Contest User page)
 	Link - List Baking Contest Users - (opens the List Baking Contest Users page)
 	Link - Baking Contest Results - (opens the list Contest Results page)
-    '''
+	'''
 
 @app.route('/addNewUser')
 def openAddNewUserPage():
