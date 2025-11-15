@@ -26,16 +26,16 @@ def home():
     '''
 
 @app.route('/addNewUser')
-def openAddNewUserPage():
-	return 'This is the add new baking contest user page'
+def addNewUser():
+	return render_template('new-baking-user.html')
 
 @app.route('/listUsers')
-def listUsersPage():
-	return 'This is the list baking contest users page'
+def listUsers():
+	return render_template('list-baking-users.html')
 
 @app.route('/listResults')
 def listResults():
-	return 'This is the list contest results page.'
+	return render_template('list-results.html')
 
 @app.route('/trial')
 def trial():
@@ -43,4 +43,5 @@ def trial():
 
 if __name__ == '__main__':
     app.run(host='127.0.0.1', port = 50000)
-    #visit http://127.0.0.1:50000 to see website
+    # visit http://127.0.0.1:50000 to see website
+

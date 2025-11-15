@@ -7,8 +7,9 @@
 </head>
 <body>
     <div>
-        <a href = "{{ url_for('openAddNewUserPage') }}">Link to adding a new user.</a>
-        <a href="{{ url_for('listUsersPage') }}">Link to list of baking users.</a>
+        <p><a href = "{{ url_for('addNewUser') }}">Add a new baking contest user.</a></p>
+        <p><a href = "{{ url_for('listUsers') }}">List all baking contest users.</a></p>
+        <p><a href = "{{ url_for('listResults') }}">List baking contest results.</a></p>
     </div>
 </body>
 </html>
