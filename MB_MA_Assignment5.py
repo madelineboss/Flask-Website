@@ -14,33 +14,27 @@ import sqlite3
 from flask import Flask, render_template
 app = Flask(__name__)
 
-#homepage
+# homepage
 @app.route('/')
 def home():
     return render_template('home.html')
 
-    '''
-	Link - Add new Baking Contest User - (opens the add a New Baking Contest User page)
-	Link - List Baking Contest Users - (opens the List Baking Contest Users page)
-	Link - Baking Contest Results - (opens the list Contest Results page)
-    '''
-
+# add new baking contest user
 @app.route('/addNewUser')
-def openAddNewUserPage():
-	return 'This is the add new baking contest user page'
+def addNewUser():
+	return render_template('new-baking-user.html')
 
+# list baking contest users
 @app.route('/listUsers')
-def listUsersPage():
-	return 'This is the list baking contest users page'
+def listUsers():
+	return render_template('list-baking-users.html')
 
+# list baking contest results
 @app.route('/listResults')
 def listResults():
-	return 'This is the list contest results page.'
-
-@app.route('/trial')
-def trial():
-    return 'Trying new page'
+	return render_template('list-results.html')
 
 if __name__ == '__main__':
     app.run(host='127.0.0.1', port = 50000)
-    #visit http://127.0.0.1:50000 to see website
+    # visit http://127.0.0.1:50000 to see website
+
