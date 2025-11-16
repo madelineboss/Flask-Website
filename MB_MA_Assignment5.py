@@ -28,13 +28,37 @@ def addNewUser():
 	elif request.method == 'POST':
 
 		# get input values from html form
-		name = request.form.get('name', '').strip()
-		age = request.form.get('age', '').strip()
-		phoneNum = request.form.get('phone', '').strip()
-		securityLevel = request.form.get('security', '').strip()
-		password = request.form.get('password', '').strip()
+		name = request.form.get("name", "").strip()
+		age = request.form.get("age", "").strip()
+		phoneNum = request.form.get("phone", "").strip()
+		securityLevel = request.form.get("security", "").strip()
+		password = request.form.get("password", "").strip()
 
 		# validate input values
+		error_messages = []
+
+		if name == "":
+			error_messages.append("You can not enter an empty name.")
+		if not age.isdigit():
+			error_messages.append("Age must be a whole number.")
+		else:
+			age = int(age)
+			if age <= 0 or age >= 121:
+				error_messages.append("Age must be greater than 0 and less than 121.")
+		if phoneNum == "":
+			error_messages.append("You can not enter enter an empty phone number.")
+		if not securityLevel.isdigit():
+			error_messages.append("Security level must be a whole number.")
+		else:
+			securityLevel = int(securityLevel)
+			if securityLevel < 1 or securityLevel > 3:
+				error_messages.append("Security level must be between 1 and 3.")
+		if password == "":
+			error_messages.append("You can not enter an empty password.")
+
+		# if error messages exist, print them on the results page
+		if error_messages:
+			return render_template('results.html', message=error_messages)
 
 		# add new user into databsae
 
