@@ -14,33 +14,41 @@ import sqlite3
 from flask import Flask, render_template, request
 app = Flask(__name__)
 
+
 def init_db():
-	#connecting to database
-    conn = sqlite3.connect('./assignment5.db')
-    #creating cursor to execute queries
-    cur = conn.cursor()
-	#creating the users table if it does not already exist
-    cur.execute(''' CREATE TABLE IF NOT EXISTS users(
-	        Name TEXT NOT NULL, 
-			Age INTEGER NOT NULL,
-			PhoneNum INTEGER NOT NULL
-			SecLvl INTEGER NOT NULL
-			Password TEXT NOT NULL);
-    ''')
+	# connecting to database
+	conn = sqlite3.connect('./assignment5.db')
+	# creating cursor to execute queries
+	cur = conn.cursor()
+	# creating the users table if it does not already exist
+	cur.execute('''CREATE TABLE IF NOT EXISTS users(
+	Name TEXT NOT NULL,
+	Age INTEGER NOT NULL,
+	PhoneNum INTEGER NOT NULL,
+	SecLvl INTEGER NOT NULL,
+	Password TEXT NOT NULL
+	);''')
+	conn.commit()
+	conn.close()
+	
+def get_db():
+	conn = sqlite3.connect('./assignment5.db')
+	conn.row_factory = sqlite3.Row
+	return conn
 
-    conn.commit()
-
+	
 # homepage
 @app.route('/')
 def home():
-    return render_template('home.html')
+	return render_template('home.html')
+
 
 # add new baking contest user
 @app.route('/addNewUser', methods=['GET', 'POST'])
 def addNewUser():
 	if request.method == 'GET':
 		return render_template('new-baking-user.html')
-	
+
 	elif request.method == 'POST':
 
 		# get input values from html form
@@ -76,12 +84,18 @@ def addNewUser():
 		if error_messages:
 			return render_template('results.html', message=error_messages)
 
-		# add new user into databsae
+		# add new user into database using a parameterized query
+		conn = sqlite3.connect('./assignment5.db')
+		cur = conn.cursor()
+		cur.execute(
+			"INSERT INTO users (Name, Age, PhoneNum, SecLvl, Password) VALUES (?, ?, ?, ?, ?)",
+			(name, age, phoneNum, securityLevel, password)
+		)
+		conn.commit()
+		conn.close()
 
 		# return success message (THE RESULTS PAGE IS THE SUCCESS/ERROR MESSAGES)
-
-		# debug message - remove later
-		return "you have tried to add a new baking contest user!"
+		return render_template('results.html', message=["User added successfully."])
 
 
 # list baking contest users
@@ -89,12 +103,15 @@ def addNewUser():
 def listUsers():
 	return render_template('list-baking-users.html')
 
+
 # list baking contest results
 @app.route('/listResults')
 def listResults():
 	return render_template('list-results.html')
 
+
 if __name__ == '__main__':
-    app.run(host='127.0.0.1', port = 50000)
-    # visit http://127.0.0.1:50000 to see website
+	init_db()
+	app.run(host='127.0.0.1', port=50000)
+	# visit http://127.0.0.1:50000 to see website
 
