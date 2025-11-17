@@ -101,7 +101,13 @@ def addNewUser():
 # list baking contest users
 @app.route('/listUsers')
 def listUsers():
-	return render_template('list-baking-users.html')
+	user_list = []
+	conn = get_db()
+	cur = conn.cursor()
+	cur.execute('SELECT * from users')
+	users = cur.fetchall()
+	conn.close()
+	return render_template('list-baking-users.html', users = users)
 
 
 # list baking contest results
