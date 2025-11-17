@@ -1,8 +1,9 @@
 # Flask Website
 Name: Madeline Boss, Mahi Agrawal
-
 Date: 11/13/25
+
 Assignment: 5
+
 Due Date: November 20, 2025
 About this project: The goal of this project is to develop a web app with a web frontend and a database backend for small 
 scale real-world applications using Flask and Python
