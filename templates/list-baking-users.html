@@ -3,11 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Baking Contest Users</title>
 </head>
 <body>
-    <div>
-        <p>This is the list all baking contest users page</p>
-    </div>
+    <h1>List of Users</h1>
+    <table border="1">
+        <tr>
+            <th>Name</th>
+            <th>Age</th>
+            <th>Phone Number</th>
+            <th>Security Level</th>
+            <th>Login Password</th>
+        </tr>
+        {% for u in users %}
+        <tr>
+            <td>{{ u['Name'] }}</td>
+            <td>{{ u['Age'] }}</td>
+            <td>{{ u['PhoneNum'] }}</td>
+            <td>{{ u['SecLvl'] }}</td>
+            <td>{{ u['Password'] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
 </body>
 </html>
