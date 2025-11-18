@@ -3,11 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Baking Contest Results</title>
 </head>
 <body>
-    <div>
-        <p>This is the list baking contest results page</p>
-    </div>
+    <h1>Results of Baking Contest</h1>
+    <table border="1">
+        <tr>
+            <th>Entry ID</th>
+            <th>User ID</th>
+            <th>Name Of Baking Item</th>
+            <th>Number of Excellent Votes</th>
+            <th>Number of Ok Votes</th>
+            <th>Number of Bad Votes</th>
+        </tr>
+        {% for r in results %}
+        <tr>
+            <td>{{ r['EntryID'] }}</td>
+            <td>{{ r['UserID'] }}</td>
+            <td>{{ r['BakedItem'] }}</td>
+            <td>{{ r['ExcelVotes'] }}</td>
+            <td>{{ r['OkayVotes'] }}</td>
+            <td>{{ r['BadVotes'] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <!--Back to homepage-->
+    <p><a href = "{{ url_for('home') }}">Back to homepage.</a></p>
 </body>
 </html>

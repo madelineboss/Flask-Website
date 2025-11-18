@@ -29,6 +29,17 @@ def init_db():
 	Password TEXT NOT NULL
 	);''')
 	conn.commit()
+	cur.execute('''CREATE TABLE IF NOT EXISTS results(
+			 EntryID INTEGER NOT NULL, 
+			 UserID INTEGER NOT NULL, 
+			 BakedItem TEXT NOT NULL,
+			 ExcelVotes INTEGER NOT NULL, 
+			 OkayVotes INTEGER NOT NULL, 
+			 BadVotes INTEGER NOT NULL);
+	''')
+	conn.commit()
+	cur.execute("PRAGMA table_info(results)")
+	print(cur.fetchall())
 	conn.close()
 	
 def get_db():
@@ -113,7 +124,24 @@ def listUsers():
 # list baking contest results
 @app.route('/listResults')
 def listResults():
-	return render_template('list-results.html')
+	conn = get_db()
+	cur = conn.cursor()
+	cur.execute("SELECT COUNT(*) FROM results")
+	count = cur.fetchone()[0]
+	result = []
+	if count == 0:
+		result = [('1', '1', 'Whoot Whoot Brownies', '1', '2', '4'),
+			 ('2', '2', 'Cho Chip Cookies', '4', '1', '2'), 
+			 ('3', '3', 'Cho Cake', '2', '4', '1'),
+			 ('4', '1', 'Sugar Cookies', '2', '2', '1')]
+	cur.executemany('Insert Into results Values (?,?,?,?,?,?)', result)
+	conn.commit()
+	
+    #fetching data
+	cur.execute("SELECT * FROM results")
+	results = cur.fetchall()
+	conn.close()
+	return render_template('list-results.html', results=results)
 
 
 if __name__ == '__main__':
