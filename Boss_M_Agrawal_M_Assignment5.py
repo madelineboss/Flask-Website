@@ -38,8 +38,6 @@ def init_db():
 			 BadVotes INTEGER NOT NULL);
 	''')
 	conn.commit()
-	cur.execute("PRAGMA table_info(results)")
-	print(cur.fetchall())
 	conn.close()
 	
 def get_db():
@@ -52,6 +50,15 @@ def get_db():
 @app.route('/')
 def home():
 	return render_template('home.html')
+
+# login page
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+	if request.method == 'GET':
+		return render_template('login.html')
+
+	elif request.method == 'POST':
+		# enter
 
 
 # add new baking contest user
@@ -148,4 +155,3 @@ if __name__ == '__main__':
 	init_db()
 	app.run(host='127.0.0.1', port=50000)
 	# visit http://127.0.0.1:50000 to see website
-
