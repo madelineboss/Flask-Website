@@ -58,8 +58,22 @@ def login():
 		return render_template('login.html')
 
 	elif request.method == 'POST':
-		# enter
 
+		# get input values from html form
+		username = request.form.get("username", "").strip()
+		password = request.form.get("password", "").strip()
+
+		# validate username and password against user database
+		conn = get_db()
+		cur = conn.cursor()
+		cur.execute("SELECT * FROM users WHERE Name=? AND Password=?", (username, password))
+		user = cur.fetchone()
+		conn.close()
+
+		if user == None:
+			return render_template('login.html') # ADD ERROR MESSAGE
+		else:
+			return render_template('home.html') # CAN WE RUN HOME() INSTEAD OF CALLING RENDER_TEMPLATE OURSELVES?
 
 # add new baking contest user
 @app.route('/addNewUser', methods=['GET', 'POST'])
