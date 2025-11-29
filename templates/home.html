@@ -3,14 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Home</title>
 </head>
 <body>
-    <h2>Home</h2>
+    <h2>Welcome {{ username }}</h2>
     <div>
-        <p><a href = "{{ url_for('addNewUser') }}">Add a new baking contest user.</a></p>
-        <p><a href = "{{ url_for('listUsers') }}">List all baking contest users.</a></p>
-        <p><a href = "{{ url_for('listResults') }}">List baking contest results.</a></p>
+        {% if security >= 1 %}
+            <!--show my contest entry results-->
+            <!--add new baking contest entry-->
+        {% endif %}
+
+        {% if security >= 2 %}
+            <p><a href = "{{ url_for('listUsers') }}">List all baking contest users.</a></p>
+        {% endif %}
+
+        {% if security >= 3 %}
+            <p><a href = "{{ url_for('addNewUser') }}">Add a new baking contest user.</a></p>
+            <p><a href = "{{ url_for('listResults') }}">List baking contest results.</a></p>
+        {% endif %}
+
+        <p><a href = "{{ url_for('logout') }}">Logout.</a></p>
+        
     </div>
 </body>
 </html>
