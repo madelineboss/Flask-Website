@@ -53,7 +53,7 @@ def home():
 	if not session.get('logged_in'):
 		return render_template('login.html')
 
-	return render_template('home.html')
+	return render_template('home.html', username=session['username'], security=session['security'])
 
 # login page
 @app.route('/login', methods=['GET', 'POST'])
@@ -79,6 +79,7 @@ def login():
 		else:
 			session['logged_in'] = True
 			session['username'] = user['Name']
+			session['security'] = user['SecLvl']
 
 			return redirect(url_for('home'))
 
