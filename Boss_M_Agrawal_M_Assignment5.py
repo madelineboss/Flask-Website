@@ -186,6 +186,13 @@ def logout():
 	session.clear()
 	return redirect(url_for('login'))
 
+@app.route('/new-entry')
+def newEntry():
+	return render_template('new-entry.html')
+
+@app.route('/my-results')
+def myResults():
+	return render_template('my-results.html')
 
 if __name__ == '__main__':
 	init_db()

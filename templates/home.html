@@ -9,8 +9,8 @@
     <h2>Welcome {{ username }}</h2>
     <div>
         {% if security >= 1 %}
-            <!--show my contest entry results-->
-            <!--add new baking contest entry-->
+            <p><a href = "{{ url_for('myResults')}}">Show my baking contest results</a></p>
+            <p><a href = "{{ url_for('newEntry')}}">Add new baking contest entry</a></p>
         {% endif %}
 
         {% if security >= 2 %}
