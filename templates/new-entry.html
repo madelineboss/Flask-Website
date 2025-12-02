@@ -3,9 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>New Baking Contest Entry</title>
+    <title>Add New User</title>
 </head>
 <body>
-    
+    <h2>Add a new baking contest user:</h2>
+    <form method="POST" action="{{ url_for('addNewUser') }}">
+        <!--Name of Baking Item-->
+        <label for="name">Name of Baking Item: </label>
+        <input type="text" name="name" placeholder="Name">
+        <br><br>
+
+        <!--Age-->
+        <label for="age">Age: </label>
+        <input type="text" name="age" placeholder="Age">
+        <br><br>
+
+        <!--Phone Number-->
+        <label for="phone">Phone Number: </label>
+        <input type="text" name="phone" placeholder="Phone Number">
+        <br><br>
+
+        <!--Security Level-->
+        <label for="security">Security Level: </label>
+        <input type="text" name="security" placeholder="Security Level">
+        <br><br>
+
+        <!--Login Password-->
+        <label for="password">Login Password: </label>
+        <input type="text" name="password" placeholder="Login Password">
+        <br><br>
+
+        <!--Submit-->
+        <input type="submit" value="Submit">
+
+        <!--Back to homepage-->
+        <p><a href = "{{ url_for('home') }}">Back to homepage.</a></p>
+
+    </form>
+
 </body>
 </html>

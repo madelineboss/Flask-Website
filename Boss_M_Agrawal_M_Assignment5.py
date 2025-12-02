@@ -194,6 +194,10 @@ def newEntry():
 def myResults():
 	return render_template('my-results.html')
 
+@app.route('/results')
+def results():
+	return render_template('results.html')
+
 if __name__ == '__main__':
 	init_db()
 	app.run(host='127.0.0.1', port=50000)
