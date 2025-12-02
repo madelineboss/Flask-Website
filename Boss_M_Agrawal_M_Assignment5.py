@@ -134,6 +134,10 @@ def addNewUser():
 			"INSERT INTO users (Name, Age, PhoneNum, SecLvl, Password) VALUES (?, ?, ?, ?, ?)",
 			(name, age, phoneNum, securityLevel, password)
 		)
+		cur.execute(
+			"INSERT INTO entries (userName, item, excellent, ok, bad) VALUES (?)", 
+			(name, "", 0, 0, 0)
+		)
 		conn.commit()
 		conn.close()
 
@@ -238,6 +242,7 @@ def newEntry():
 		cur = conn.cursor()
 		cur.execute('''
 			CREATE TABLE IF NOT EXISTS entries(
+			  userName TEXT NOT NULL
 			  item TEXT NOT NULL,
 			  excellent INTEGER NOT NULL, 
 			  ok INTEGER NOT NULL, 
