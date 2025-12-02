@@ -9,16 +9,17 @@
     <h2>Welcome {{ username }}</h2>
     <div>
         {% if security >= 1 %}
-            <p><a href = "{{ url_for('myResults')}}">Show my baking contest results</a></p>
-            <p><a href = "{{ url_for('newEntry')}}">Add new baking contest entry</a></p>
+            <p><a href = "{{ url_for('myResults')}}">Show my Baking Contest Results</a></p>
+            <p><a href = "{{ url_for('newEntry')}}">Add New Baking Contest Entry</a></p>
         {% endif %}
 
         {% if security >= 2 %}
-            <p><a href = "{{ url_for('listUsers') }}">List all baking contest users.</a></p>
+            <p><a href = "{{ url_for('listUsers') }}">List all Baking Contest Users.</a></p>
         {% endif %}
 
         {% if security >= 3 %}
-            <p><a href = "{{ url_for('listResults') }}">List baking contest results.</a></p>
+            <p><a href = "{{ url_for('addNewUser')}}">Add New Baking Contest User</a></p>
+            <p><a href = "{{ url_for('listResults') }}">List Baking Contest Results.</a></p>
             <p><a href = "{{ url_for('results')}}">Baking Contest Entry Results</a></p>
         {% endif %}
 
