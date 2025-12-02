@@ -7,10 +7,10 @@
 </head>
 <body>
     <h2>Add a new baking contest user:</h2>
-    <form method="POST" action="{{ url_for('addNewUser') }}">
+    <form method="POST" action="{{ url_for('newEntry') }}">
         <!--Name of Baking Item-->
-        <label for="name">Name of Baking Item: </label>
-        <input type="text" name="name" placeholder="Name of Baking Item">
+        <label for="nameItem">Name of Baking Item: </label>
+        <input type="text" name="nameItem" placeholder="Name of Baking Item">
         <br><br>
 
         <!--Number of Excellent Votes-->
