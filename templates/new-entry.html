@@ -3,9 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>New Baking Contest Entry</title>
+    <title>Add New User</title>
 </head>
 <body>
-    
+    <h2>Add a new baking contest user:</h2>
+    <form method="POST" action="{{ url_for('newEntry') }}">
+        <!--Name of Baking Item-->
+        <label for="nameItem">Name of Baking Item: </label>
+        <input type="text" name="nameItem" placeholder="Name of Baking Item">
+        <br><br>
+
+        <!--Number of Excellent Votes-->
+        <label for="excelVote">Number of Excellent Votes: </label>
+        <input type="text" name="excelVote" placeholder="Excellent Votes">
+        <br><br>
+
+        <!--Phone Number-->
+        <label for="okVotes">Number of OK Votes: </label>
+        <input type="text" name="okVotes" placeholder="OK Votes">
+        <br><br>
+
+        <!--Security Level-->
+        <label for="badVotes">Number of Bad Votes: </label>
+        <input type="text" name="badVotes" placeholder="badVotes">
+        <br><br>
+
+        <!--Submit-->
+        <input type="submit" value="Submit">
+
+        <!--Back to homepage-->
+        <p><a href = "{{ url_for('home') }}">Back to homepage.</a></p>
+
+    </form>
+
 </body>
 </html>

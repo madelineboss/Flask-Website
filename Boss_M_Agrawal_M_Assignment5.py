@@ -186,13 +186,79 @@ def logout():
 	session.clear()
 	return redirect(url_for('login'))
 
-@app.route('/new-entry')
+@app.route('/new-entry', methods=['GET', 'POST'])
 def newEntry():
-	return render_template('new-entry.html')
+	if not session.get('logged_in'):
+		return render_template('login.html')
+	
+	if request.method == 'GET':
+		return render_template('new-entry.html')
+	
+	elif request.method == 'POST':
+		#grabbing input vals from the web page
+		bakingItem = request.form.get("nameItem", "").strip()
+		excellent = request.form.get("excelVote", "").strip()
+		ok = request.form.get("okVotes", "").strip()
+		bad = request.form.get("badVotes", "").strip()
+
+		#valitading user inputs
+		error_msgs = []
+
+		if bakingItem == "":
+			error_msgs.append("You cannot enter an empty name of baking item.")
+		
+		if not excellent.isdigit():
+			error_msgs.append("Number of excellent votes must be a whole number.")
+
+		else:
+			excellent = int(excellent)
+			if excellent < 0:
+				error_msgs.append("Number of excellent votes cannot be less than zero.")
+		
+		if not ok.isdigit():
+			error_msgs.append("Number of OK votes must be a whole number.")
+
+		else:
+			ok = int(ok)
+			if ok < 0:
+				error_msgs.append("Number of OK votes cannot be less than zero.")
+
+		if not bad.isdigit():
+			error_msgs.append("Number of bad votes must be a whole number.")
+
+		else:
+			bad = int(bad)
+			if bad < 0:
+				error_msgs.append("Number of bad votes cannot be less than zero.")
+
+		if error_msgs:
+			return render_template('results.html', message=error_msgs)
+		
+		conn = sqlite3.connect('./assignment5.db')
+		cur = conn.cursor()
+		cur.execute('''
+			CREATE TABLE IF NOT EXISTS entries(
+			  item TEXT NOT NULL,
+			  excellent INTEGER NOT NULL, 
+			  ok INTEGER NOT NULL, 
+			  bad INTEGER NOT NULL);
+		''')
+		cur.execute(
+			"INSERT INTO entries (item, excellent, ok, bad) VALUES (?, ?, ?, ?)",
+			(bakingItem, excellent, ok, bad)
+		)
+		conn.commit()
+		conn.close()
+
+		return render_template('results.html', message = ["Baking contest entry successfully added."])
 
 @app.route('/my-results')
 def myResults():
 	return render_template('my-results.html')
+
+@app.route('/results')
+def results():
+	return render_template('results.html')
 
 if __name__ == '__main__':
 	init_db()
