@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page Not Found</title>
+</head>
+<body>
+    <h2>Not Found</h2>
+    <div>
+        {% for line in message %}
+            {{ line }}
+            <br>
+        {% endfor %}
+    </div>
+
+    <!--Back to homepage-->
+    <p><a href = "{{ url_for('home') }}">Back to homepage.</a></p>
+</body>
+</html>

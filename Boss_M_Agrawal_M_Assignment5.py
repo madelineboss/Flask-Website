@@ -101,6 +101,10 @@ def addNewUser():
 	if not session.get('logged_in'):
 		return render_template('login.html')
 	
+	if session.get('security') != 3:
+		not_found_msg = ["The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again."]
+		return render_template('not-found.html', message=not_found_msg)
+		
 	if request.method == 'GET':
 		return render_template('new-baking-user.html')
 
@@ -159,6 +163,10 @@ def listUsers():
 	if not session.get('logged_in'):
 		return render_template('login.html')
 	
+	if session.get('security') < 2:
+		not_found_msg = ["The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again."]
+		return render_template('not-found.html', message=not_found_msg)
+	
 	conn = get_db()
 	cur = conn.cursor()
 	cur.execute('SELECT * from users')
@@ -172,6 +180,10 @@ def listUsers():
 def listResults():
 	if not session.get('logged_in'):
 		return render_template('login.html')
+	
+	if session.get('security') != 3:
+		not_found_msg = ["The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again."]
+		return render_template('not-found.html', message=not_found_msg)
 	
 	conn = get_db()
 	cur = conn.cursor()
@@ -276,6 +288,10 @@ def myResults():
 @app.route('/results')
 def results():
 	return render_template('results.html')
+
+@app.route('/not-found')
+def notFound():
+	return render_template('not-found.html')
 
 if __name__ == '__main__':
 	init_db()
