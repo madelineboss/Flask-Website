@@ -3,9 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Contest Results</title>
+    <title>{{ username }}'s Contest Results</title>
 </head>
 <body>
-    
+    <table border="1">
+        <tr>
+            <th>Name of Baking Item</th>
+            <th>Number of Excellent Votes</th>
+            <th>Number of OK Votes</th>
+            <th>Number of Bad Votes</th>
+        </tr>
+
+        {% for e in entries %}
+        <tr>
+            <td>{{ e['item']}}</td>
+            <td>{{ e['excellent']}}</td>
+            <td>{{ e['ok']}}</td>
+            <td>{{ e['bad']}}</td>
+        </tr>
+
+        {% endfor %}
+    </table>
 </body>
 </html>

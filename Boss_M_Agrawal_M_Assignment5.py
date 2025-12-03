@@ -16,6 +16,18 @@ app = Flask(__name__)
 
 app.secret_key = "baking-contest-key"
 
+conn = sqlite3.connect("./assignment5.db")
+cur = conn.cursor()
+cur.execute('''CREATE TABLE IF NOT EXISTS entries(
+			entryID INTEGER PRIMARY KEY AUTOINCREMENT, 
+			userName TEXT NOT NULL, 
+			item TEXT NOT NULL, 
+			excellent INTEGER NOT NULL, 
+			ok INTEGER NOT NULL, 
+			bad INTEGER NOT NULL);''')
+conn.commit()
+conn.close()
+
 def init_db():
 	# connecting to database
 	conn = sqlite3.connect('./assignment5.db')
@@ -134,10 +146,6 @@ def addNewUser():
 			"INSERT INTO users (Name, Age, PhoneNum, SecLvl, Password) VALUES (?, ?, ?, ?, ?)",
 			(name, age, phoneNum, securityLevel, password)
 		)
-		cur.execute(
-			"INSERT INTO entries (userName, item, excellent, ok, bad) VALUES (?)", 
-			(name, "", 0, 0, 0)
-		)
 		conn.commit()
 		conn.close()
 
@@ -240,17 +248,9 @@ def newEntry():
 		
 		conn = sqlite3.connect('./assignment5.db')
 		cur = conn.cursor()
-		cur.execute('''
-			CREATE TABLE IF NOT EXISTS entries(
-			  userName TEXT NOT NULL
-			  item TEXT NOT NULL,
-			  excellent INTEGER NOT NULL, 
-			  ok INTEGER NOT NULL, 
-			  bad INTEGER NOT NULL);
-		''')
 		cur.execute(
-			"INSERT INTO entries (item, excellent, ok, bad) VALUES (?, ?, ?, ?)",
-			(bakingItem, excellent, ok, bad)
+			"INSERT INTO entries (userName, item, excellent, ok, bad) VALUES (?, ?, ?, ?, ?)",
+			(session['username'], bakingItem, excellent, ok, bad)
 		)
 		conn.commit()
 		conn.close()
@@ -259,7 +259,19 @@ def newEntry():
 
 @app.route('/my-results')
 def myResults():
-	return render_template('my-results.html')
+	if not session.get('logged_in'):
+		return render_template('login.html')
+	
+	username = session['username']
+	conn = sqlite3.connect('./assignment5.db')
+	conn.row_factory = sqlite3.Row
+	cur = conn.cursor()
+	cur.execute("SELECT * FROM entries WHERE userName = ?",
+			 (username, ))
+	user_entries = cur.fetchall()
+	conn.close()
+	return render_template('my-results.html', entries=user_entries)
+
 
 @app.route('/results')
 def results():
