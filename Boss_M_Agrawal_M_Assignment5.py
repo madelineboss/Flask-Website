@@ -16,6 +16,18 @@ app = Flask(__name__)
 
 app.secret_key = "baking-contest-key"
 
+conn = sqlite3.connect("./assignment5.db")
+cur = conn.cursor()
+cur.execute('''CREATE TABLE IF NOT EXISTS entries(
+			entryID INTEGER PRIMARY KEY AUTOINCREMENT, 
+			userName TEXT NOT NULL, 
+			item TEXT NOT NULL, 
+			excellent INTEGER NOT NULL, 
+			ok INTEGER NOT NULL, 
+			bad INTEGER NOT NULL);''')
+conn.commit()
+conn.close()
+
 def init_db():
 	# connecting to database
 	conn = sqlite3.connect('./assignment5.db')
@@ -89,6 +101,10 @@ def addNewUser():
 	if not session.get('logged_in'):
 		return render_template('login.html')
 	
+	if session.get('security') != 3:
+		not_found_msg = ["The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again."]
+		return render_template('not-found.html', message=not_found_msg)
+		
 	if request.method == 'GET':
 		return render_template('new-baking-user.html')
 
@@ -147,6 +163,10 @@ def listUsers():
 	if not session.get('logged_in'):
 		return render_template('login.html')
 	
+	if session.get('security') < 2:
+		not_found_msg = ["The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again."]
+		return render_template('not-found.html', message=not_found_msg)
+	
 	conn = get_db()
 	cur = conn.cursor()
 	cur.execute('SELECT * from users')
@@ -160,6 +180,10 @@ def listUsers():
 def listResults():
 	if not session.get('logged_in'):
 		return render_template('login.html')
+	
+	if session.get('security') != 3:
+		not_found_msg = ["The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again."]
+		return render_template('not-found.html', message=not_found_msg)
 	
 	conn = get_db()
 	cur = conn.cursor()
@@ -236,16 +260,9 @@ def newEntry():
 		
 		conn = sqlite3.connect('./assignment5.db')
 		cur = conn.cursor()
-		cur.execute('''
-			CREATE TABLE IF NOT EXISTS entries(
-			  item TEXT NOT NULL,
-			  excellent INTEGER NOT NULL, 
-			  ok INTEGER NOT NULL, 
-			  bad INTEGER NOT NULL);
-		''')
 		cur.execute(
-			"INSERT INTO entries (item, excellent, ok, bad) VALUES (?, ?, ?, ?)",
-			(bakingItem, excellent, ok, bad)
+			"INSERT INTO entries (userName, item, excellent, ok, bad) VALUES (?, ?, ?, ?, ?)",
+			(session['username'], bakingItem, excellent, ok, bad)
 		)
 		conn.commit()
 		conn.close()
@@ -254,11 +271,27 @@ def newEntry():
 
 @app.route('/my-results')
 def myResults():
-	return render_template('my-results.html')
+	if not session.get('logged_in'):
+		return render_template('login.html')
+	
+	username = session['username']
+	conn = sqlite3.connect('./assignment5.db')
+	conn.row_factory = sqlite3.Row
+	cur = conn.cursor()
+	cur.execute("SELECT * FROM entries WHERE userName = ?",
+			 (username, ))
+	user_entries = cur.fetchall()
+	conn.close()
+	return render_template('my-results.html', entries=user_entries)
+
 
 @app.route('/results')
 def results():
 	return render_template('results.html')
+
+@app.route('/not-found')
+def notFound():
+	return render_template('not-found.html')
 
 if __name__ == '__main__':
 	init_db()
