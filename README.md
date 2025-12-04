@@ -29,7 +29,10 @@ navigate to http://127.0.0.1:50000
 
 
 Users:
+
 	Username: Tom	Password: admin		Security Level: 3
+
 	Username: Alice	Password: alicepw	Security Level: 2
+	
 	Username: Bob	Password: bobpw		Security Level: 1
 
