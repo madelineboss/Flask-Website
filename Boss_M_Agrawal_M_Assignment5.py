@@ -72,11 +72,19 @@ def init_db():
 			 OkayVotes INTEGER NOT NULL, 
 			 BadVotes INTEGER NOT NULL);
 	''')
-	cur.execute(
-		"INSERT INTO users (Name, Age, PhoneNum, SecLvl, Password) VALUES (?, ?, ?, ?, ?)",
-		(encryptedName, age, encryptedPhone, sec, encryptedPass)
-	)
-	conn.commit()
+
+	# check if Tom (admin) already exists
+	cur.execute("SELECT * FROM users WHERE Name = ?", (encryptedName,))
+	existing = cur.fetchone()
+
+	# only insert if not already present
+	if existing is None:
+	    cur.execute(
+	        "INSERT INTO users (Name, Age, PhoneNum, SecLvl, Password) VALUES (?, ?, ?, ?, ?)",
+	        (encryptedName, age, encryptedPhone, sec, encryptedPass)
+	    )
+	    conn.commit()
+
 	cur.execute('''CREATE TABLE IF NOT EXISTS entries(
 			entryID INTEGER PRIMARY KEY AUTOINCREMENT, 
 			userName TEXT NOT NULL, 
@@ -257,11 +265,11 @@ def listResults():
 			 ('2', '2', 'Cho Chip Cookies', '4', '1', '2'), 
 			 ('3', '3', 'Cho Cake', '2', '4', '1'),
 			 ('4', '1', 'Sugar Cookies', '2', '2', '1')]
-	cur.executemany('Insert Into results Values (?,?,?,?,?,?)', result)
-	conn.commit()
+		cur.executemany('Insert Into results Values (?,?,?,?,?,?)', result)
+		conn.commit()
 	
-    #fetching data
-	cur.execute("SELECT * FROM results")
+	#fetching data
+	cur.execute("SELECT * FROM entries")
 	results = cur.fetchall()
 	conn.close()
 	return render_template('list-results.html', results=results)
