@@ -35,6 +35,7 @@ def init_db():
 	cur = conn.cursor()
 	# creating the users table if it does not already exist
 	cur.execute('''CREATE TABLE IF NOT EXISTS users(
+	userID INTEGER PRIMARY KEY AUTOINCREMENT,
 	Name TEXT NOT NULL,
 	Age INTEGER NOT NULL,
 	PhoneNum INTEGER NOT NULL,
