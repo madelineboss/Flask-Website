@@ -1,6 +1,6 @@
 """
 Name: Madeline Boss, Mahi Agrawal
-Date: 11/13/25
+Date: 12/4/25
 Assignment: 5
 Due Date: November 20, 2025
 About this project: The goal of this project is to develop a web app with a web frontend and a database backend for small 
