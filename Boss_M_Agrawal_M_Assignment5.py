@@ -40,20 +40,18 @@ def init_db():
 	iv = b'OWFJATh1Zowac2xr'
 	cipher = AESCipher(key,iv)
 
-	name = "Tom"
-	age = 22
-	phone = "1231231111"
-	sec = 3
-	password = "admin"
-
-	encryptedName = cipher.encrypt(name.encode("utf-8"))
-	encryptedPhone = cipher.encrypt(phone.encode("utf-8"))
-	encryptedPass = cipher.encrypt(password.encode("utf-8"))
-
 	# connecting to database
 	conn = sqlite3.connect('./assignment5.db')
 	# creating cursor to execute queries
 	cur = conn.cursor()
+
+	# drop tables
+	cur.execute("DROP TABLE IF EXISTS users")
+	cur.execute("DROP TABLE IF EXISTS results")
+	cur.execute("DROP TABLE IF EXISTS entries")
+	conn.commit()
+
+
 	# creating the users table if it does not already exist
 	cur.execute('''CREATE TABLE IF NOT EXISTS users(
 	userID INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -72,11 +70,33 @@ def init_db():
 			 OkayVotes INTEGER NOT NULL, 
 			 BadVotes INTEGER NOT NULL);
 	''')
-	cur.execute(
-		"INSERT INTO users (Name, Age, PhoneNum, SecLvl, Password) VALUES (?, ?, ?, ?, ?)",
-		(encryptedName, age, encryptedPhone, sec, encryptedPass)
-	)
-	conn.commit()
+
+
+	# insert initial users for testing purposes
+	cur.execute("SELECT * FROM users")
+	existing = cur.fetchone()
+
+	if existing is None: # only insert if not already present
+		initial_users = [
+	        ("Tom",   22, "1231231111", 3, "admin"),
+	        ("Alice", 30, "5551112222", 1, "alicepw"),
+	        ("Bob",   45, "5553334444", 2, "bobpw")
+	    ]
+		
+		for name, age, phone, sec, pw in initial_users:
+			eName = cipher.encrypt(name.encode("utf-8"))
+			ePhone = cipher.encrypt(phone.encode("utf-8"))
+			ePw = cipher.encrypt(pw.encode("utf-8"))
+
+			cur.execute(
+				"INSERT INTO users (Name, Age, PhoneNum, SecLvl, Password) VALUES (?, ?, ?, ?, ?)",
+				(eName, age, ePhone, sec, ePw)
+			)
+
+		conn.commit()
+
+
+	# creating the entries table if it does not already exist
 	cur.execute('''CREATE TABLE IF NOT EXISTS entries(
 			entryID INTEGER PRIMARY KEY AUTOINCREMENT, 
 			userName TEXT NOT NULL, 
@@ -85,6 +105,26 @@ def init_db():
 			ok INTEGER NOT NULL, 
 			bad INTEGER NOT NULL);''')
 	conn.commit()
+
+
+	# initiate initial entries for testing purposes
+	cur.execute("SELECT * FROM entries")
+	existing = cur.fetchone()
+
+	if existing is None: # only insert if not already present
+	    entries = [
+	        ("Tom",   "Pumpkin Pie",        5, 0, 0),
+	        ("Alice", "Cupcakes",           3, 1, 0),
+	        ("Bob",   "Chocolate Cake",     4, 2, 1)
+	    ]
+
+	    cur.executemany(
+	        "INSERT INTO entries (userName, item, excellent, ok, bad) VALUES (?, ?, ?, ?, ?)",
+	        entries
+	    )
+	    conn.commit()
+
+
 	conn.close()
 
 def get_db():
@@ -257,11 +297,11 @@ def listResults():
 			 ('2', '2', 'Cho Chip Cookies', '4', '1', '2'), 
 			 ('3', '3', 'Cho Cake', '2', '4', '1'),
 			 ('4', '1', 'Sugar Cookies', '2', '2', '1')]
-	cur.executemany('Insert Into results Values (?,?,?,?,?,?)', result)
-	conn.commit()
+		cur.executemany('Insert Into results Values (?,?,?,?,?,?)', result)
+		conn.commit()
 	
-    #fetching data
-	cur.execute("SELECT * FROM results")
+	#fetching data
+	cur.execute("SELECT * FROM entries")
 	results = cur.fetchall()
 	conn.close()
 	return render_template('list-results.html', results=results)

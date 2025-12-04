@@ -18,12 +18,12 @@
         </tr>
         {% for r in results %}
         <tr>
-            <td>{{ r['EntryID'] }}</td>
-            <td>{{ r['UserID'] }}</td>
-            <td>{{ r['BakedItem'] }}</td>
-            <td>{{ r['ExcelVotes'] }}</td>
-            <td>{{ r['OkayVotes'] }}</td>
-            <td>{{ r['BadVotes'] }}</td>
+            <td>{{ r['entryID'] }}</td>
+            <td>{{ r['userName'] }}</td>
+            <td>{{ r['item'] }}</td>
+            <td>{{ r['excellent'] }}</td>
+            <td>{{ r['ok'] }}</td>
+            <td>{{ r['bad'] }}</td>
         </tr>
         {% endfor %}
     </table>
