@@ -36,12 +36,25 @@ class AESCipher(object):
         return str(decrypted, 'utf-8')
 
 def init_db():
+	key = b'BLhgpCL81fdLBk23HkZp8BgbT913cqt0'
+	iv = b'OWFJATh1Zowac2xr'
+	cipher = AESCipher(key,iv)
+
+	name = "Tom"
+	age = 22
+	phone = "1231231111"
+	sec = 3
+	password = "admin"
+
+	encryptedName = cipher.encrypt(name.encode("utf-8"))
+	encryptedPhone = cipher.encrypt(phone.encode("utf-8"))
+	encryptedPass = cipher.encrypt(password.encode("utf-8"))
+
 	# connecting to database
 	conn = sqlite3.connect('./assignment5.db')
 	# creating cursor to execute queries
 	cur = conn.cursor()
 	# creating the users table if it does not already exist
-	cur.execute("DELETE FROM users")
 	cur.execute('''CREATE TABLE IF NOT EXISTS users(
 	userID INTEGER PRIMARY KEY AUTOINCREMENT,
 	Name TEXT NOT NULL,
@@ -59,6 +72,10 @@ def init_db():
 			 OkayVotes INTEGER NOT NULL, 
 			 BadVotes INTEGER NOT NULL);
 	''')
+	cur.execute(
+		"INSERT INTO users (Name, Age, PhoneNum, SecLvl, Password) VALUES (?, ?, ?, ?, ?)",
+		(encryptedName, age, encryptedPhone, sec, encryptedPass)
+	)
 	conn.commit()
 	cur.execute('''CREATE TABLE IF NOT EXISTS entries(
 			entryID INTEGER PRIMARY KEY AUTOINCREMENT, 
@@ -94,11 +111,17 @@ def login():
 		# get input values from html form
 		username = request.form.get("username", "").strip()
 		password = request.form.get("password", "").strip()
+		key = b'BLhgpCL81fdLBk23HkZp8BgbT913cqt0'
+		iv = b'OWFJATh1Zowac2xr'
+		cipher = AESCipher(key,iv)
+
+		encrypt_user = cipher.encrypt(username.encode("utf-8"))
+		encrypt_pass = cipher.encrypt(password.encode('utf-8'))
 
 		# validate username and password against user database
 		conn = get_db()
 		cur = conn.cursor()
-		cur.execute("SELECT * FROM users WHERE Name=? AND Password=?", (username, password))
+		cur.execute("SELECT * FROM users WHERE Name=? AND Password=?", (encrypt_user, encrypt_pass))
 		user = cur.fetchone()
 		conn.close()
 
@@ -106,7 +129,7 @@ def login():
 			return render_template('login.html', error="Invalid username and/or password!")
 		else:
 			session['logged_in'] = True
-			session['username'] = user['Name']
+			session['username'] = cipher.decrypt(user['Name'])
 			session['security'] = user['SecLvl']
 
 			return redirect(url_for('home'))
