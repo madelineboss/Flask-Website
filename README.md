@@ -23,7 +23,7 @@ python3 -m pip install --user pycryptodome
 
 To run application:
 
-python3 Boss_M_Agrawal_M_Assignment5.py
+python3 Boss_M_Agrawal_M_Assignment6.py
 
 navigate to http://127.0.0.1:50000
 
